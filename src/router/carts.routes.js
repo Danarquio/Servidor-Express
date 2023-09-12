@@ -13,12 +13,13 @@ CartRouter.get(`/`, async (req, res) =>{
 })
 
 CartRouter.get(`/:id`, async (req, res) =>{
-    res.send(await carts.getCartsById(req.params.id))
+    let id = parseInt(req.params.id)
+    res.send(await carts.getCartsById(id))
 })
 
 CartRouter.post(`/:cid/products/:pid`, async (req, res) => {
-    let cartId = req.params.cid
-    let productId = req.params.pid
+    let cartId = parseInt(req.params.cid)
+    let productId = parseInt(req.params.pid)
     res.send(await carts.addProductInCart(cartId, productId))
 })
 

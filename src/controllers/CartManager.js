@@ -1,5 +1,4 @@
 import {promises as fs} from "fs"
-import { nanoid } from "nanoid"
 import ProductManager from "./ProductManager.js"
 
 const productAll = new ProductManager
@@ -19,10 +18,8 @@ class CartManager {
         try {
             let carts = await this.readCarts();
             if (carts.length === 0) {
-                // Si no hay carritos, comienza con 1
                 return 1;
             } else {
-                // Encuentra el ID más alto en los carritos existentes y suma 1
                 const maxId = Math.max(...carts.map((cart) => parseInt(cart.id)));
                 return maxId + 1;
             }
@@ -49,8 +46,8 @@ class CartManager {
 
     addCarts = async () => {
         let cartsOld = await this.readCarts();
-        let id = this.nextId.toString(); // Usa el ID actual y conviértelo a cadena
-        this.nextId++; // Incrementa el ID en 1 para la próxima vez
+        let id = this.nextId;
+        this.nextId++;
         let cartsConcat = [{ id: id, products: [] }, ...cartsOld];
         await this.writeCarts(cartsConcat);
         return "Carrito Agregado";

@@ -13,8 +13,7 @@ ProductRouter.get ("/", async (req,res) => {
  })
 
  ProductRouter.get ("/:id", async (req,res) => {
-    // let id = parseInt(req.params.id) si usaramos solo numeros para el id
-    let id = req.params.id
+    let id = parseInt(req.params.id) 
     res.send(await product.getProductsById(id))
  
  })
@@ -26,14 +25,14 @@ ProductRouter.post("/", async (req,res) => {
 })
 
 ProductRouter.put("/:id", async (req,res) => {
-    let id = req.params.id
+    let id = parseInt(req.params.id)
     let updateProducts = req.body
     res.send(await product.updateProducts(id, updateProducts))
  
  })
 
 ProductRouter.delete("/:id", async (req,res) => {
-    let id = req.params.id
+    let id = parseInt(req.params.id)
     res.send(await product.deleteProducts(id))
  
  })
