@@ -1,16 +1,16 @@
 const socket = io()
 socket.emit("message", "Hola, me estoy comuncando desde un webSocket")
 
+socket.on("productAdded", (product) => {
+    // Crear un nuevo elemento HTML para el producto
+    const newProductElement = document.createElement("div");
+    newProductElement.innerHTML = `
+        <h2>${product.title}</h2>
+        <p>${product.description}</p>
+        <!-- Otros campos del producto -->
+    `;
 
-socket.on("evento_para_socket_individual", data=>{
-    console.log(data)
-})
-
-socket.on("evento_para_todos_menos_socket_actual", data => {
-    console.log(data)
-})
-
-socket.on("evento_para_todos", data => {
-    console.log(data)
-})
-
+    // Agregar el nuevo producto al contenedor de productos
+    const productsContainer = document.getElementById("productsContainer");
+    productsContainer.appendChild(newProductElement);
+});

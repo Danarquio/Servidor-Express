@@ -40,8 +40,22 @@ app.get("/realtimeproducts", (req, res)=> {
 })
 SocketServer.on("connection", (socket) => {
     console.log(`Usuario ${socket.id}`)
-    socket.on(`message`, (data)=>)
+
 })
+
+app.post("/addProduct", async (req, res) => {
+    const productData = req.body;
+    const result = await product.addProducts(productData);
+    
+    if (result === "Producto Agregado") {
+        // Emite un mensaje a través de WebSocket para actualizar la lista de productos en tiempo real
+        SocketServer.emit("productAdded", productData);
+    }
+
+    res.redirect("/");
+});
+
+
 
 app.get("/", async (req, res) => {
     let allProducts = await product.getProducts()
