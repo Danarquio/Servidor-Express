@@ -24,23 +24,40 @@ class ProductManager {
     addProducts = async (product) => {
         const { title, description, code, price, status, stock, category } = product;
   
+
+        const numericPrice = parseFloat(price);
+        const booleanStatus = status === 'true'; // Convierte la cadena en booleano
+        const numericStock = parseInt(stock);
+        const numericMinimo = parseInt(product.minimo);
+
         if (
             typeof title !== "string" ||
             typeof description !== "string" ||
             typeof code !== "string" ||
-            typeof price !== "number" ||
-            typeof status !== "boolean" ||
-            typeof stock !== "number" ||
-            typeof category !== "string"
+            typeof numericPrice !== "number" || // Comprueba numericPrice
+            typeof booleanStatus !== "boolean" || // Comprueba booleanStatus
+            typeof numericStock !== "number" || // Comprueba numericStock
+            typeof category !== "string" ||
+            typeof numericMinimo !== "number"
         ) {
             return "Todos los campos son requeridos y deben tener el tipo de valor correcto";
         }
-    
+        console.log('Datos del producto a agregar:', product);
         let productsOld = await this.readProducts();
 
         product.id = productsOld.length + 1;
-        let productAll = [...productsOld, product];
+
+        const productWithTypes = {
+            ...product,
+            price: numericPrice,
+            status: booleanStatus,
+            stock: numericStock,
+            minimo: numericMinimo
+        };
+
+        let productAll = [...productsOld, productWithTypes];
         await this.writeProducts(productAll);
+        console.log('Producto agregado:', productWithTypes);
         return "Producto Agregado";
     }
     

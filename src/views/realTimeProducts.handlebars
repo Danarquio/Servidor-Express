@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agregar Producto</title>
+     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
     <h1>Agregar Producto</h1>
@@ -48,37 +49,29 @@
         <button type="submit">Agregar Producto</button>
     </form>
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-        const socket = io(); // Connect to your WebSocket server
+<script>
+    const socket = io(); // Conectar al servidor WebSocket
+    
+    // Manejar el evento de formulario y emitir datos al servidor
+    document.getElementById('productForm').addEventListener('submit', (e) => {
+        e.preventDefault();
 
-        // Listen for form submission
-        document.getElementById('productForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            // Gather form data
-            const formData = new FormData(e.target);
-            const productData = {};
+        // Recopilar datos del formulario
+        const formData = new FormData(e.target);
+        const productData = {};
 
-            formData.forEach((value, key) => {
-                productData[key] = value;
-            });
-
-            // Emit a WebSocket event to send the product data
-            socket.emit('addProduct', productData);
-
-            // Clear the form
-            e.target.reset();
+        formData.forEach((value, key) => {
+            productData[key] = value;
         });
-    </script>
+        console.log('Formulario enviado:', productData)
+
+        // Emitir un evento de WebSocket para enviar los datos del producto
+        socket.emit('addProduct', productData);
+
+        // Limpiar el formulario
+        e.target.reset();
+    });
+</script>
 </body>
 </html>
 
-
-
-
-{{!-- <div>
-    Bueno, vamoa juga
-</div>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/js/realTimeProducts.js"></script> --}}
