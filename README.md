@@ -1,4 +1,4 @@
-# Preentrega 1
+# 4to Desafio
 ## Servidor Express con Node, Handlebars y WebSocket
 
 Este proyecto es una aplicación en Node.js que gestiona productos y carritos de compras. Permite agregar, actualizar, eliminar y consultar productos y carritos de compra. Además, utiliza WebSockets para proporcionar una experiencia en tiempo real y Handlebars para renderizar las vistas.
