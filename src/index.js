@@ -86,11 +86,5 @@ app.get("/:id", async (req, res) => {
 
 
 
-//app.use("/api/products", ProductRouter)
-//app.use("/api/cart", CartRouter)
-
-
-
-
 //  by @Danarquio
-//26:38
+
