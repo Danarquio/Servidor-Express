@@ -56,10 +56,10 @@ La aplicación estará disponible en:
 
 
 - ### CARRITOS
-- POST `/api/cart`: Agrega un nuevo carrito.
-- GET `/api/cart`: Obtiene la lista de carritos
-- GET `/api/cart/:id`: Obtiene un carrito por su ID.
-- DELETE `/api/cart/:id`: Elimina carrito por su ID.
+- POST `/api/carts`: Agrega un nuevo carrito.
+- GET `/api/carts`: Obtiene la lista de carritos
+- GET `/api/carst/:id`: Obtiene un carrito por su ID.
+- DELETE `/api/carts/:id`: Elimina carrito por su ID.
 
 
 - ### Estructura del Objeto: 
@@ -135,5 +135,8 @@ Integracion/
 
 ## Capturas de Pantalla
 
-![Captura de pantalla 1](/src/public/files/screenshot1.png)
-![Captura de pantalla 2](/src/public/files/screenshot2.png)
+![Captura de Pantalla 1](/src/public/files/Capturadepantalla1.png)
+![Captura de Pantalla 2](/src/public/files/Capturadepantalla2.png)
+![Captura de Pantalla 3](/src/public/files/Capturadepantalla3.png)
+![Captura de Pantalla 4](/src/public/files/Capturadepantalla4.png)
+![Captura de Pantalla 5](/src/public/files/Capturadepantalla5.png)
