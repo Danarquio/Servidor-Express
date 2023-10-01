@@ -1,26 +1,74 @@
 import { Router } from "express";
-import CartManager from "../controllers/CartManager.js";
+import { cartsModel } from "../models/carts.model.js";
 
-const CartRouter = Router()
-const carts = new CartManager
+const router = Router()
 
-CartRouter.post("/", async(req,res) => {
-    res.send(await carts.addCarts())
+//get
+router.get("/", async(req,res)=> {
+    try {
+        let carts = await cartsModel.find()
+        res.send({result : "success", payload:  carts})
+    } catch(error){
+        console.log(error)
+        res.status(500).send({ status: "error", error: "Error al obtener carritos" })
+    }
 })
 
-CartRouter.get(`/`, async (req, res) =>{
-    res.send(await carts.readCarts())
-})
+// post
+router.post("/", async (req, res) => {
+    if (!req.body) {
+        res.status(400).send({ status: "error", error: "Solicitud sin cuerpo (body)" });
+        return;
+    }
 
-CartRouter.get(`/:id`, async (req, res) =>{
-    let id = parseInt(req.params.id)
-    res.send(await carts.getCartsById(id))
-})
+    let { description, quantity, total } = req.body;
+    if (!description || !quantity || !total) {
+        res.status(400).send({ status: "error", error: "Faltan datos" });
+        return;
+    }
 
-CartRouter.post(`/:cid/products/:pid`, async (req, res) => {
-    let cartId = parseInt(req.params.cid)
-    let productId = parseInt(req.params.pid)
-    res.send(await carts.addProductInCart(cartId, productId))
-})
+    try {
+        let result = await cartsModel.create({ description, quantity, total });
+        res.send({ result: "success", payload: result });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ status: "error", error: "Error al crear carrito" });
+    }
+});
 
-export default CartRouter
+// put
+router.put("/:id_carts", async (req, res) => {
+    if (!req.body) {
+        res.status(400).send({ status: "error", error: "Solicitud sin cuerpo (body)" });
+        return;
+    }
+
+    let { id_carts } = req.params;
+    let cartsToReplace = req.body;
+    if (!cartsToReplace.description || !cartsToReplace.quantity || !cartsToReplace.total) {
+        res.status(400).send({ status: "error", error: "Faltan datos en parámetros" });
+        return;
+    }
+
+    try {
+        let result = await cartsModel.updateOne({ _id: id_carts }, cartsToReplace);
+        res.send({ result: "success", payload: result });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ status: "error", error: "Error al actualizar carrito" });
+    }
+});
+
+// delete
+router.delete("/:id_carts", async (req, res) => {
+    let { id_carts } = req.params;
+    try {
+        let result = await cartsModel.deleteOne({ _id: id_carts });
+        res.send({ result: "success", payload: result });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ status: "error", error: "Error al eliminar carrito" });
+    }
+});
+
+export default router;
