@@ -1,65 +1,44 @@
 import {promises as fs} from "fs"
+import { productsModel } from "../models/products.model.js"
 
 
-class ProductManager {
+class ProductManager extends productsModel{
     constructor (){ 
-        this.path = "./src/models/products.json"
+        super();
     }
 
     readProducts = async () => {
-        let products = await fs.readFile(this.path , "utf-8")
-        return JSON.parse(products)
-    }
-
-    writeProducts = async (product) =>{
-        await fs.writeFile(this.path , JSON.stringify(product))
-        
-    }
-
-    exist = async(id) => {
-        let products= await this.readProducts()
-        return products.find(prod => prod.id === id)
-    }
-
-    addProducts = async (product) => {
-        const { title, description, code, price, status, stock, category } = product;
+      try {
+          const products = await productsModel.find();
+          return products;
+      } catch (error) {
+          console.error("Error al leer productos de MongoDB:", error);
+          return [];
+      }
+  }
   
 
-        const numericPrice = parseFloat(price);
-        const booleanStatus = status === 'true'; // Convierte la cadena en booleano
-        const numericStock = parseInt(stock);
-        const numericMinimo = parseInt(product.minimo);
+    exist = async (id) => {
+      try {
+          const product = await productsModel.findById(id);
+          return product;
+      } catch (error) {
+          console.error("Error al verificar la existencia del producto:", error);
+          return null;
+      }
+  }
 
-        if (
-            typeof title !== "string" ||
-            typeof description !== "string" ||
-            typeof code !== "string" ||
-            typeof numericPrice !== "number" || // Comprueba numericPrice
-            typeof booleanStatus !== "boolean" || // Comprueba booleanStatus
-            typeof numericStock !== "number" || // Comprueba numericStock
-            typeof category !== "string" ||
-            typeof numericMinimo !== "number"
-        ) {
-            return "Todos los campos son requeridos y deben tener el tipo de valor correcto";
+
+    async addProducts(product) {
+        try {
+          const newProduct = new productsModel(product);
+          await newProduct.save();
+          return "Producto Agregado";
+        } catch (error) {
+          console.error('Error al agregar el producto:', error);
+          return 'Error al agregar el producto';
         }
-        console.log('Datos del producto a agregar:', product);
-        let productsOld = await this.readProducts();
-
-        product.id = productsOld.length + 1;
-
-        const productWithTypes = {
-            ...product,
-            price: numericPrice,
-            status: booleanStatus,
-            stock: numericStock,
-            minimo: numericMinimo
-        };
-
-        let productAll = [...productsOld, productWithTypes];
-        await this.writeProducts(productAll);
-        console.log('Producto agregado:', productWithTypes);
-        return "Producto Agregado";
-    }
+      }
     
     
     
@@ -67,21 +46,44 @@ class ProductManager {
         return await this.readProducts()
     }
 
-    getProductsById = async (id) => {
-        let productsById = await this.exist(id)
-        if ( !productsById) return "Producto no encontrado :("
-        return productsById
+    async getProductById(productId) {
+      try {
+        const product = await productsModel.findById(productId);
+        if (!product) {
+          return null; // Si no se encuentra el producto, devuelve null o un valor que indique que no se encontró.
+        }
+        return product;
+      } catch (error) {
+        console.error('Error al buscar el producto por ID:', error);
+        return null; // Manejo de errores, puedes cambiar esto según tus necesidades.
+      }
     }
 
-    updateProducts = async (id, product) => {
-        let productsById= await this.exist(id)
-        if ( !productsById) return "Producto no encontrado :("
-        await this.deleteProducts(id)
-        let productsOld =await this.readProducts()
-        let products = [{...product, id:id}, ...productsOld]
-        await this.writeProducts(products)
-        return "Producto Actualizado"
+    async getProductByTitle(productTitle) {
+      try {
+          // Convertir el título a minúsculas antes de buscar
+          const product = await productsModel.findOne({ title: productTitle.toLowerCase() });
+          if (!product) {
+              return null;
+          }
+          return product;
+      } catch (error) {
+          console.error('Error al buscar el producto por título:', error);
+          return null;
+      }
+  }
+  
+  
+
+  updateProducts = async (id, product) => {
+    const updatedProduct = await productsModel.findOneAndUpdate({ _id: id }, product, { new: true });
+    if (updatedProduct) {
+        return "Producto Actualizado";
+    } else {
+        return "Producto no encontrado :(";
     }
+}
+
 
     deleteProducts = async (id) => {
         let products= await this.readProducts()
@@ -94,6 +96,106 @@ class ProductManager {
         return "Producto no existe"
     }
 
+    async getProductsByLimit(limit){
+        try {
+            const products = await productsModel.find().limit(limit)
+            if (products.length < limit){
+                limit = products.length
+            }
+            return products;
+        }catch (error){
+            throw error;}
+    }
+
+
+    async getProductsByPage(page, productsPerPage){
+        if (page <= 0){
+            page = 1
+        }
+        try {
+            const products = await ProductManager.find()
+            .skip((page - 1) * productsPerPage )
+            .limit(productsPerPage)
+            return products
+        }catch (error){
+            throw error
+        }
+    }
+
+    async getProductsByQuery(query){
+        console.log(query)
+        try {
+            const products = await productsModel.find({
+                description: {$regex: query, $options: `i`}}
+            )
+            console.log(products)
+            return products
+        }catch (error){
+            throw error
+        }
+    }
+
+    async getProductsMaster(page = 1, limit = 10, category, availability, sortOrder) 
+      {
+        try
+        {
+          // Construye un objeto de filtro basado en los parámetros de consulta
+          let filter = {};
+          // Calcula el índice de inicio y fin para la paginación
+          const startIndex = (page - 1) * limit;
+          const endIndex = page * limit;
+
+          const sortOptions = {};
+          
+          if (sortOrder === 'asc') {
+            sortOptions.price = 1; // Ordenar ascendentemente por precio
+          } else if (sortOrder === 'desc') {
+            sortOptions.price = -1; // Ordenar descendente por precio
+          } else {
+            throw new Error('El parámetro sortOrder debe ser "asc" o "desc".');
+          }
+
+          if (category != "") {
+            filter.category = category;
+          }
+          if (availability != "") {
+            filter.availability = availability;
+          }
+
+          // Realiza la consulta utilizando el filtro y la paginación
+          const query = ProductManager.find(filter)
+            .skip(startIndex)
+            .limit(limit)
+            .sort(sortOptions); ;
+          const products = await query.exec();
+
+        // Calcula el total de páginas y otros detalles de paginación
+        const totalProducts = await ProductManager.countDocuments(filter);
+        const totalPages = Math.ceil(totalProducts / limit);
+        const hasPrevPage = startIndex > 0;
+        const hasNextPage = endIndex < totalProducts;
+        const prevLink = hasPrevPage ? `/api/products?page=${page - 1}&limit=${limit}` : null;
+        const nextLink = hasNextPage ? `/api/products?page=${page + 1}&limit=${limit}` : null;
+
+        // Devuelve la respuesta con la estructura requerida
+        return {
+          status: 'success',
+          payload: products,
+          totalPages: totalPages,
+          prevPage: hasPrevPage ? page - 1 : null,
+          nextPage: hasNextPage ? page + 1 : null,
+          page: page,
+          hasPrevPage: hasPrevPage,
+          hasNextPage: hasNextPage,
+          prevLink: prevLink,
+          nextLink: nextLink,
+        };
+        } catch (error) {
+          console.error('Error al obtener los productos:', error);
+          // Si se produce un error, devuelve un objeto con status "error" y el mensaje de error en "payload"
+          return { status: 'error', payload: 'Error al obtener los productos' };
+        }
+      }
 }
 
 export default ProductManager

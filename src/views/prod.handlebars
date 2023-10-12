@@ -1,22 +1,21 @@
 <div className="descproducto">
-    <img src="{{products.thumbnails}}" alt="">
-    <h2>{{products.title}}</h2>
+    <img src="{{product.thumbnails}}" alt="">
+    <h2>{{product.title}}</h2>
 
-    <h4>{{products.category}}</h4>
+    <h4>{{product.category}}</h4>
     </Link>
     <hr />
     <p>
-        En rebanadas, por trozo o la pieza entera de <strong>{{products.title}}</strong>.
+        En rebanadas, por trozo o la pieza entera de <strong>{{product.title}}</strong>.
         <br />
         <br />
-        {{products.description}}
+        {{product.description}}
         <br />
         <br />
     </p>
     <p className="indicacion">
         <br />
-        VENTA MINIMA {{products.stock}}gr x ${{products.price}}.
+        VENTA MÍNIMA {{product.stock}} gr x ${{product.price}}.
     </p>
-
     <hr />
 </div>

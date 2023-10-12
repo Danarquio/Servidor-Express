@@ -1,8 +1,12 @@
 import { Router } from "express";
 import { cartsModel } from "../models/carts.model.js";
+import CartManager from "../controllers/CartManager.js";
 
 const router = Router()
+const carts = new CartManager()
 
+
+//GESTION DE CARRITO
 //get
 router.get("/", async(req,res)=> {
     try {
@@ -70,5 +74,84 @@ router.delete("/:id_carts", async (req, res) => {
         res.status(500).send({ status: "error", error: "Error al eliminar carrito" });
     }
 });
+
+
+
+
+//GESTION DE PRODUCTOS DENTRO DE CARRITO
+// Agregar productos a un carrito -- :cid es el id del carrito y :pid es el id del producto
+
+// Verificar si un producto está en el carrito
+router.get("/:cid/products/:pid", async (req, res) => {
+    const cartId = req.params.cid;  // Obtener cartId de los parámetros de la URL
+    const prodId = req.params.pid;  // Obtener prodId de los parámetros de la URL
+  
+    try {
+      const result = await carts.existProductInCart(cartId, prodId);
+  
+      res.send({ result: "success", payload: result });
+    } catch (error) {
+      console.error("Error al verificar el producto en el carrito:", error);
+      res.status(500).send({ status: "error", error: "Error al verificar el producto en el carrito" });
+    }
+  });
+  
+
+router.post("/:cid/products/:pid", async (req, res) => {
+    let cartId = req.params.cid;
+    let prodId = req.params.pid;
+    let { product_id, quantity } = req.body; 
+
+    try {
+        const result = await carts.addProductInCart(cartId, prodId, product_id, quantity);
+
+        res.send({ result: "success", payload: result });
+    } catch (error) {
+        console.error("Error al agregar productos al carrito:", error);
+        res.status(500).send({ status: "error", error: "Error al agregar productos al carrito" });
+    }
+});
+
+// Modificar productos de un carrito
+router.put("/:cid/products/:pid", async (req, res) => {
+    let cartId = req.params.cid;
+    let prodId = req.params.pid;
+    let { product_id, quantity } = req.body;
+
+    try {
+        const result = await carts.updateProductInCart(cartId, prodId, product_id, quantity);
+
+        res.send({ result: "success", payload: result });
+    } catch (error) {
+        console.error("Error al modificar productos en el carrito:", error);
+        res.status(500).send({ status: "error", error: "Error al modificar productos en el carrito" });
+    }
+});
+
+// Eliminar productos de un carrito
+router.delete("/:cid/products/:pid", async (req, res) => {
+    let cartId = req.params.cid;
+    let prodId = req.params.pid;
+
+    try {
+        const result = await carts.removeProductFromCart(cartId, prodId);
+
+        res.send({ result: "success", payload: result });
+    } catch (error) {
+        console.error("Error al eliminar productos del carrito:", error);
+        res.status(500).send({ status: "error", error: "Error al eliminar productos del carrito" });
+    }
+});
+
+
+
+//Population
+//Traemos todos los carritos con http://localhost:8080/api/carts con get
+router.get("/population/:cid", async (req,res)=>{
+    let cartId = req.params.cid
+    res.send(await carts.getCartWithProducts(cartId))
+})
+
+
 
 export default router;

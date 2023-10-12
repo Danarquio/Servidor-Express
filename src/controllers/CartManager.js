@@ -1,10 +1,14 @@
 import {promises as fs} from "fs"
 import ProductManager from "./ProductManager.js"
+import { cartsModel } from "../models/carts.model.js";
+import mongoose from "mongoose";
 
 const productAll = new ProductManager
 
-class CartManager {
+class CartManager extends cartsModel{
     constructor() {
+        super()
+
         this.path = "./src/models/carts.json"
         this.nextId = null;
         this.initNextId()
@@ -59,30 +63,148 @@ class CartManager {
         return cartById
     }
 
-    addProductInCart = async (cartId, productId) => {
-        let cartById = await this.exist(cartId)
-        if ( !cartById) return "Carrito no encontrado :("
-        let productById= await productAll.exist(productId)
-        if ( !productById) return "Producto no encontrado :("   
+    
+    async addProductInCart(cartId, prodId) 
+      {
+        try 
+        {
+          const cart = await cartsModel.findById(cartId);
+    
+          if (!cart) 
+          {
+            return 'Carrito no encontrado';
+          }
+    
+          // Verifica si el producto ya está en el carrito
+          const existingProduct = cart.products.find((product) => product.productId === prodId);
+    
+          if (existingProduct) 
+          {
+            // Si el producto ya está en el carrito, aumenta la cantidad
+            existingProduct.quantity += 1;
+          } 
+          else 
+          {
+            // Si el producto no está en el carrito, agrégalo
+            cart.products.push({
+              productId: prodId,
+              quantity: 1,
+            });
+          } 
+          await cart.save();
+          return 'Producto agregado al carrito';
+        } catch (error) {
+          console.error('Error al agregar el producto al carrito:', error);
+          return 'Error al agregar el producto al carrito';
+        }
+      }
+
+
+
+      async getCartWithProducts(cartId) 
+      {
+        try
+        {
+          const cart = await cartsModel.findById(cartId).populate('products.productId').lean();
+      
+          if (!cart) {
+            return 'Carrito no encontrado';
+          }
+      
+          return cart;
+        } catch (error) {
+          console.error('Error al obtener el carrito con productos:', error);
+          return 'Error al obtener el carrito con productos';
+        }}
+
+
+        async updateProductInCart(cartId, prodId, updatedProduct) 
+        {
+          try 
+          {
+            const cart = await cartsModel.findById(cartId);
+            if (!cart) 
+            {
+              return 'Carrito no encontrado';
+            }     
+            // Busca el producto en el carrito por su ID
+            const productToUpdate = cart.products.find((product) => product.productId === prodId);
         
-        let cartsAll =await this.readCarts ()
-        let cartFilter = cartsAll.filter(cart=> cart.id != cartId) 
-
-        if(cartById.products.some((prod)=> prod.id === productId)){
-            let moreproductInCar = cartById.products.find((prod)=> prod.id === productId)
-            moreproductInCar.cantidad++
-
-            let cartsConcat = [cartById, ...cartFilter]
-            await this.writeCarts(cartsConcat)
-            return "Producto sumado al Carrito"
+            if (!productToUpdate) 
+            {
+              return 'Producto no encontrado en el carrito';
+            }
+        
+            // Actualiza el producto con la información proporcionada
+            Object.assign(productToUpdate, updatedProduct);
+        
+            await cart.save();
+            return 'Producto actualizado en el carrito';
+          } catch (error) {
+            console.error('Error al actualizar el producto en el carrito:', error);
+            return 'Error al actualizar el producto en el carrito';
+          }
         }
 
-        cartById.products.push({id : productById.id, cantidad : 1})
-        let cartsConcat = [cartById, ...cartFilter]        
-        await this.writeCarts(cartsConcat)
-        return "Producto Agregado al Carrito"
-    }
 
+        async existProductInCart(cartId, prodId) {
+            try {
+              const cart = await cartsModel.findById(cartId);
+          
+              if (!cart) {
+                return 'Carrito no encontrado';
+              }
+          
+              // Verifica si el producto está en el carrito
+              const existingProduct = cart.products.find(
+                (product) => product.productId.toString() === prodId
+              );
+          
+              if (existingProduct) {
+                return 'El producto está en el carrito';
+              } else {
+                return 'El producto no está en el carrito';
+              }
+            } catch (error) {
+              console.error('Error al verificar el producto en el carrito:', error);
+              return 'Error al verificar el producto en el carrito';
+            }
+          }
+
+
+          async removeProductFromCart(cartId, prodId) {
+            try {
+                const cart = await cartsModel.findById(cartId);
+        
+                if (!cart) {
+                    return 'Carrito no encontrado';
+                }
+        
+                // Convierte prodId en un ObjectId
+                const productObjectId = new mongoose.Types.ObjectId(prodId);
+        
+                // Encuentra el índice del producto a eliminar
+                const productIndex = cart.products.findIndex((product) =>
+                    product.productId.equals(productObjectId)
+                );
+        
+                if (productIndex === -1) {
+                    return 'Producto no encontrado en el carrito';
+                }
+        
+                // Elimina el producto del carrito
+                cart.products.splice(productIndex, 1);
+        
+                await cart.save();
+                return 'Producto eliminado del carrito';
+            } catch (error) {
+                console.error('Error al eliminar productos del carrito:', error);
+                return 'Error al eliminar productos del carrito';
+            }
+        }
+        
+        
+          
 }
 
 
