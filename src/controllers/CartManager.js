@@ -106,7 +106,6 @@ class CartManager extends cartsModel{
         try
         {
           const cart = await cartsModel.findById(cartId).populate('products.productId').lean();
-      
           if (!cart) {
             return 'Carrito no encontrado';
           }

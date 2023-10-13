@@ -61,8 +61,8 @@ class ProductManager extends productsModel{
 
     async getProductByTitle(productTitle) {
       try {
-          // Convertir el título a minúsculas antes de buscar
           const product = await productsModel.findOne({ title: productTitle.toLowerCase() });
+          console.log('Product Object:', product);
           if (!product) {
               return null;
           }
@@ -72,6 +72,8 @@ class ProductManager extends productsModel{
           return null;
       }
   }
+  
+  
   
   
 

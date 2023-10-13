@@ -1,7 +1,7 @@
-# 5to Desafio
-## Pactica de Integracion Express con Node, Handlebars y MongoDB
+# 2da Preentrega
+## Servidor Express con Node, Handlebars y persistencia de datos en MongoDB
 
-Este proyecto es una aplicación en Node.js que gestiona productos y carritos de compras. Permite agregar, actualizar, eliminar y consultar productos y carritos de compra. Además, utiliza WebSockets para proporcionar una experiencia en tiempo real y Handlebars para renderizar las vistas.
+Este proyecto es una aplicación en Node.js que gestiona productos y carritos de compras. Permite agregar, actualizar, eliminar y consultar productos y carritos de compra. Además, utiliza Handlebars para renderizar las vistas tanto de la lista de productos y detalle del producto como el carrito con los productos agregados.
 
 ## Instalación
 
@@ -24,7 +24,7 @@ Este proyecto es una aplicación en Node.js que gestiona productos y carritos de
 
 ## Uso
 
-1. Inicia la aplicación ejecutando el siguiente comando:
+Inicia la aplicación ejecutando el siguiente comando:
 
 ```bash
     npm start
@@ -33,7 +33,7 @@ La aplicación estará disponible en:
 ### `http://localhost:8080`
 
 - ### PRODUCTOS:
-2. Puedes utilizar las siguientes rutas para interactuar con la aplicación desde POSTMAN:
+### 1. Puedes utilizar las siguientes rutas para interactuar con la aplicación desde POSTMAN:
 
 - GET `/api/prod`: Obtiene la lista de productos.
 - GET `/api/prod/:id`: Obtiene un producto por su ID.
@@ -42,28 +42,50 @@ La aplicación estará disponible en:
 - DELETE `/api/prod/:id`: Elimina un producto por su ID.
 
 - ### Estructura del Objeto: 
-- Los valores necesarios para poder agregar un nuevo producto son: ` description, price, stock`
+- Los valores necesarios para poder agregar un nuevo producto son: ` title, description, price, stock, category, thumnails`
 
 
 ```json
 {
-    "description": "Soy un producto ",
-    "image": "URL de la imagen ",
-    "price": 1000,
-    "stock": 500
+    "title": "nombre del producto",
+    "description": "descripcion del producto",
+    "price": "precio del producto como tipo number",
+    "stock": "cantidad disponible como tipo number",
+    "category": "categoria",
+    "thumbnails": "url de la imagen en png",
+    "carru1": "url de la imagen 1",
+    "carru2": "url de la imagen 2",
+    "carru3": "url de la imagen 3",
+    "minimo": "cantidad minima de vente como tipo number",
+    "availability": "disponibilidad como tipo booleano"
 }
 ```
+### 2. Puedes interactuar desde POSTMAN para otras funcionalidades:
+
+- GET `/api/prod/limit/:limit`: Obtiene la lista de productos con un limite.
+- GET `/api/prod/page/:page`: Obtiene la lista de producto por su page.
+- POST `/api/prod/info`: Permite filtrar los productos por orden de precio o por categoria.
+- PUT `/api/prod//info/?category=:category` filtra todos los productos que correspondan a :category .
+- DELETE `/api/prod//info/?sortOrder=desc`: ordena los productos en orden descendiente.
+
+### 3. Puedes utilizar las siguientes rutas para interactuar con la aplicación desde el navegador web:
+
+- `/products`: Obtiene la lista renderizada de todos los productos.
+- `/products/:id`: Obtiene el detalle del producto renderizado por su ID.
+
 
 
 - ### CARRITOS
+
+### 1. Puedes utilizar las siguientes rutas para interactuar con la aplicación desde POSTMAN:
 - POST `/api/carts`: Agrega un nuevo carrito.
 - GET `/api/carts`: Obtiene la lista de carritos
-- GET `/api/carst/:id`: Obtiene un carrito por su ID.
+- GET `/api/carts/:id`: Obtiene un carrito por su ID.
 - DELETE `/api/carts/:id`: Elimina carrito por su ID.
 
 
 - ### Estructura del Objeto: 
-- Los valores necesarios para poder agregar un nuevo producto son: ` description, quantity, total`
+- Los valores necesarios para poder agregar un nuevo carrito son: ` description, quantity, total`
 
 
 ```json
@@ -74,6 +96,22 @@ La aplicación estará disponible en:
 }
 ```
 
+- Los valores necesarios para poder agregar un producto a un carrito existente: ` description, quantity, total`
+
+
+```json
+{
+    "description": "Hola soy un carrito",
+    "quantity": 20,
+    "total": 50000
+}
+```
+
+### 2. Puedes utilizar las siguientes rutas para interactuar con la aplicación desde POSTMAN:
+- POST `/api/carts`: Agrega un nuevo carrito.
+- GET `/api/carts`: Obtiene la lista de carritos
+- GET `/api/carts/:id`: Obtiene un carrito por su ID.
+- DELETE `/api/carts/:id`: Elimina carrito por su ID.
 
 
 3. Puedes utilizar las siguientes rutas para interactuar con la aplicación desde el navegador web:
