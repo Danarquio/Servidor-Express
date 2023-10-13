@@ -78,7 +78,7 @@ La aplicación estará disponible en:
 - ### CARRITOS
 
 ### 1. Puedes utilizar las siguientes rutas para interactuar con la aplicación desde POSTMAN:
-- POST `/api/carts`: Agrega un nuevo carrito.
+
 - GET `/api/carts`: Obtiene la lista de carritos
 - GET `/api/carts/:id`: Obtiene un carrito por su ID.
 - DELETE `/api/carts/:id`: Elimina carrito por su ID.
@@ -87,37 +87,33 @@ La aplicación estará disponible en:
 - ### Estructura del Objeto: 
 - Los valores necesarios para poder agregar un nuevo carrito son: ` description, quantity, total`
 
-
-```json
-{
-    "description": "Hola soy un carrito",
-    "quantity": 20,
-    "total": 50000
-}
-```
-
-- Los valores necesarios para poder agregar un producto a un carrito existente: ` description, quantity, total`
-
-
-```json
-{
-    "description": "Hola soy un carrito",
-    "quantity": 20,
-    "total": 50000
-}
-```
-
-### 2. Puedes utilizar las siguientes rutas para interactuar con la aplicación desde POSTMAN:
 - POST `/api/carts`: Agrega un nuevo carrito.
-- GET `/api/carts`: Obtiene la lista de carritos
-- GET `/api/carts/:id`: Obtiene un carrito por su ID.
-- DELETE `/api/carts/:id`: Elimina carrito por su ID.
+```json
+{
+    "description": "Hola soy un carrito",
+    "quantity": 20,
+    "total": 50000
+}
+```
+
+- Los valores necesarios para poder agregar un producto a un carrito existente: ` product_id, quantity`
+
+- POST `/api/carts/:cid/products/:pid`: Agrega un producto a un carrito.
+```json
+{
+    "product_id": "id del producto",
+    "quantity": 20,
+}
+```
+- DELETE `/api/carts/:cid/products/:id`: Elimina un producto del carrito por su ID.
 
 
-3. Puedes utilizar las siguientes rutas para interactuar con la aplicación desde el navegador web:
+### 2. Puedes utilizar las siguientes rutas para interactuar con la aplicación desde el navegador web:
 
-- `/`: Obtiene la lista renderizada de todos los productos.
+- `/cart/:cid`: Obtiene la lista renderizada de todos los productos dentro del carrito, por el id del carrito.
 - `/:id`: Obtiene el producto renderizado por su ID.
+
+- ### CHAT
 - `/chat`: Te muestra un formulario para enviar un mensaje junto a tu usuario a la base de datos de Mongo Atlas
 - `/chat`:Puedes utilizar tambien esta ruta para enviar el mensaje desde POSTMAN seleccionando POST
 
@@ -178,3 +174,6 @@ Integracion/
 ![Captura de Pantalla 3](/src/public/files/Capturadepantalla3.png)
 ![Captura de Pantalla 4](/src/public/files/Capturadepantalla4.png)
 ![Captura de Pantalla 5](/src/public/files/Capturadepantalla5.png)
+![Captura de Pantalla 6](/src/public/files/Capturadepantalla6.png)
+![Captura de Pantalla 7](/src/public/files/Capturadepantalla7.png)
+![Captura de Pantalla 8](/src/public/files/Capturadepantalla8.png)

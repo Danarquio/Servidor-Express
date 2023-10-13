@@ -1,4 +1,3 @@
-import {promises as fs} from "fs"
 import { productsModel } from "../models/products.model.js"
 
 
@@ -59,23 +58,7 @@ class ProductManager extends productsModel{
       }
     }
 
-    async getProductByTitle(productTitle) {
-      try {
-          const product = await productsModel.findOne({ title: productTitle.toLowerCase() });
-          console.log('Product Object:', product);
-          if (!product) {
-              return null;
-          }
-          return product;
-      } catch (error) {
-          console.error('Error al buscar el producto por título:', error);
-          return null;
-      }
-  }
-  
-  
-  
-  
+ 
 
   updateProducts = async (id, product) => {
     const updatedProduct = await productsModel.findOneAndUpdate({ _id: id }, product, { new: true });
@@ -115,7 +98,7 @@ class ProductManager extends productsModel{
             page = 1
         }
         try {
-            const products = await ProductManager.find()
+            const products = await productsModel.find()
             .skip((page - 1) * productsPerPage )
             .limit(productsPerPage)
             return products
@@ -125,12 +108,10 @@ class ProductManager extends productsModel{
     }
 
     async getProductsByQuery(query){
-        console.log(query)
         try {
             const products = await productsModel.find({
                 description: {$regex: query, $options: `i`}}
             )
-            console.log(products)
             return products
         }catch (error){
             throw error
