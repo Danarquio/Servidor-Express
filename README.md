@@ -177,3 +177,4 @@ Integracion/
 ![Captura de Pantalla 6](/src/public/files/Capturadepantalla6.png)
 ![Captura de Pantalla 7](/src/public/files/Capturadepantalla7.png)
 ![Captura de Pantalla 8](/src/public/files/Capturadepantalla8.png)
+![Captura de Pantalla 9](/src/public/files/Capturadepantalla9.png)
