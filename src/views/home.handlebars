@@ -1,31 +1,24 @@
-<a href="/chat"><h1>Ir al chat</h1></a>
-<a href="/cart/6519628deea059c6ae6e8e6d"><h1>Ir al Carrito</h1></a>
-<h1>Productos</h1>
-<div class="shop">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Producto</title>
+     <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <img src="https://danarquio.github.io/preentrega1diaz/static/media/Dragon.561ef1fd2e215fdac7e01d9795925577.svg" style="max-height: 200px;">
+    <h1>Bienvenido a Dracarnis</h1>
+    <h3>visita cualquiera de nuestras secciones</h3>
     
-    {{#each products}}
-    <div class="productos">
+    <ul>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/products">Productos</a></li>
+        <li><a href="/chat">Chat</a></li>
+    </ul>
+    
 
-        <img class="vuelta" src={{this.carru1}} alt={{this.title}} />
-        <div class="infoCard">
+<script src="/js/chat.js"></script>
+</body>
+</html>
 
-            <div class="textosprod">
-
-                <h2 class="productos__nombre">{{this.title}}</h2>
-                <div>
-                    <h2 class="productos__precio">${{this.price}}</h2>
-                    <h4 class="productos__gramo">x {{this.minimo}}gramos</h4>
-                </div>
-
-                <button class="add-to-cart-btn" data-product-id="{{this._id}}">Agregar al carrito</button>
-                <a href="/products/{{this._id}}">Ver detalles</a>
-                
-            </div>
-
-        </div>
-
-
-    </div>
-    {{/each}}
-
-</div>

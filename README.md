@@ -1,7 +1,7 @@
 # 2da Preentrega
-## Servidor Express con Node, Handlebars y persistencia de datos en MongoDB
+## Servidor Express con Node, Handlebars y persistencia de datos en MongoDB con login de usuario incorporado
 
-Este proyecto es una aplicación en Node.js que gestiona productos y carritos de compras. Permite agregar, actualizar, eliminar y consultar productos y carritos de compra. Además, utiliza Handlebars para renderizar las vistas tanto de la lista de productos y detalle del producto como el carrito con los productos agregados.
+Este proyecto es una aplicación en Node.js que gestiona productos y carritos de compras. Permite agregar, actualizar, eliminar y consultar productos y carritos de compra. Además, utiliza Handlebars para renderizar las vistas tanto de la lista de productos y detalle del producto como el carrito con los productos agregados. Para poder acceder a las funcionalidades de ver y gestionar productos, debes pasar un login de usuario, registrarte primeramente y luego validar los datos al ingresar.
 
 ## Instalación
 
@@ -19,6 +19,10 @@ Este proyecto es una aplicación en Node.js que gestiona productos y carritos de
     npm i express-handlebars
     npm i MongoDB
     npm i Mongoose
+    npm i cookie-parser
+    npm i express-session
+    npm i session-file-store
+    npm i connect-mongo
 ```
 
 
@@ -131,24 +135,35 @@ Integracion/
 │   ├── controllers/
 │   │   ├── CartManager.js
 │   │   ├── multer.js
-│   │   └── ProductManager.js
+│   │   ├── ProductManager.js
+│   │   └── UserManager.js
 │   ├── models/
 │   │   ├── carts.json
 │   │   ├── carts.model.js
 │   │   ├── messages.model.js
 │   │   ├── products.json
-│   │   └── products.model.js
+│   │   ├── pproducts.model.js
+│   │   └── users.model.js
 │   ├── public/
 │   │   ├── css/
 │   │   ├── js/
 │   │   └── files/
-│   ├── routes/
+│   ├── router/
 │   │   ├── carts.routes.js
 │   │   ├── messages.routes.js
 │   │   ├── product.routes.js
 │   │   ├── upload.routes.js
+│   │   ├── user.routes.js
 │   │   └── views.routes.js
 │   ├── views/
+│   │   ├── cart.handlebars
+│   │   ├── chat.handlebars
+│   │   ├── detail.handlebars
+│   │   ├── home.handlebars
+│   │   ├── login.handlebars
+│   │   ├── productos.handlebars
+│   │   ├── profile.handlebars
+│   │   └── register.handlebars
 │   ├── index.js
 │   └── utils.js
 ├── package.json
@@ -163,7 +178,11 @@ Integracion/
 - Express.js
 - MongoDB 
 - Handlebars 
-- Mongoose 
+- Mongoose
+- cookie-parser
+- express-session
+- session-file-store
+- connect-mongo
 
 
 
@@ -173,8 +192,4 @@ Integracion/
 ![Captura de Pantalla 2](/src/public/files/Capturadepantalla2.png)
 ![Captura de Pantalla 3](/src/public/files/Capturadepantalla3.png)
 ![Captura de Pantalla 4](/src/public/files/Capturadepantalla4.png)
-![Captura de Pantalla 5](/src/public/files/Capturadepantalla5.png)
-![Captura de Pantalla 6](/src/public/files/Capturadepantalla6.png)
-![Captura de Pantalla 7](/src/public/files/Capturadepantalla7.png)
-![Captura de Pantalla 8](/src/public/files/Capturadepantalla8.png)
-![Captura de Pantalla 9](/src/public/files/Capturadepantalla9.png)
+
