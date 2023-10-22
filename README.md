@@ -164,6 +164,7 @@ Integracion/
 │   │   ├── productos.handlebars
 │   │   ├── profile.handlebars
 │   │   └── register.handlebars
+
 │   ├── index.js
 │   └── utils.js
 ├── package.json

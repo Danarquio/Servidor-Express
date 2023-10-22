@@ -87,6 +87,7 @@ class UserManager extends usersModel
           return 'Error al eliminar el usuario';
         }
       }
+
       async validateUser(param) {
         try 
         {
@@ -99,6 +100,31 @@ class UserManager extends usersModel
         } 
         catch (error)
         {
+          console.error('Error al validar usuario', error);
+          return 'Error al obtener el usuario';
+        }
+      }
+
+
+      async findUser(email) {
+        try {
+          const user = await UserManager.findOne({ email }, { email: 1, first_name: 1, last_name: 1, password: 1, rol:1 });
+      
+          if (!user) {
+            return "Usuario no encontrado";
+          }
+      
+          return user;
+        } catch (error) {
+          console.error('Error al validar usuario', error);
+          return 'Error al obtener el usuario';
+        }
+      }
+      async findEmail(param) {
+        try {
+          const user = await UserManager.findOne(param)    
+          return user
+        } catch (error) {
           console.error('Error al validar usuario', error);
           return 'Error al obtener el usuario';
         }
