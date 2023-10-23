@@ -3,6 +3,8 @@
 
 Este proyecto es una aplicación en Node.js que gestiona productos y carritos de compras. Permite agregar, actualizar, eliminar y consultar productos y carritos de compra. Además, utiliza Handlebars para renderizar las vistas tanto de la lista de productos y detalle del producto como el carrito con los productos agregados. Para poder acceder a las funcionalidades de ver y gestionar productos, debes pasar un login de usuario, registrarte primeramente y luego validar los datos al ingresar.
 
+En esta ultima actualizacion, el proceso de registro y login se hace con la proteccion de la contraseña del usuario almacenada en la base de datos ademas de agregar un boton para realizar el registro con tu perfil de gitHub.
+
 ## Instalación
 
 1. Clona este repositorio en tu máquina local.
@@ -23,6 +25,10 @@ Este proyecto es una aplicación en Node.js que gestiona productos y carritos de
     npm i express-session
     npm i session-file-store
     npm i connect-mongo
+    npm i bcrypt
+    npm i passport
+    npm i passport-local
+    npm i passport-github2
 ```
 
 
@@ -184,6 +190,8 @@ Integracion/
 - express-session
 - session-file-store
 - connect-mongo
+- bcrypt
+- passport
 
 
 
@@ -193,4 +201,5 @@ Integracion/
 ![Captura de Pantalla 2](/src/public/files/Capturadepantalla2.png)
 ![Captura de Pantalla 3](/src/public/files/Capturadepantalla3.png)
 ![Captura de Pantalla 4](/src/public/files/Capturadepantalla4.png)
+![Captura de Pantalla 5](/src/public/files/Capturadepantalla5.png) ![Captura de Pantalla 6](/src/public/files/Capturadepantalla6.png)
 
