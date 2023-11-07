@@ -1,9 +1,9 @@
 # 2da Preentrega
-## Servidor Express con Node, Handlebars y persistencia de datos en MongoDB con login de usuario incorporado
+## Servidor Express con Node, Handlebars y persistencia de datos en MongoDB con login de usuario incorporado usando JWT
 
 Este proyecto es una aplicación en Node.js que gestiona productos y carritos de compras. Permite agregar, actualizar, eliminar y consultar productos y carritos de compra. Además, utiliza Handlebars para renderizar las vistas tanto de la lista de productos y detalle del producto como el carrito con los productos agregados. Para poder acceder a las funcionalidades de ver y gestionar productos, debes pasar un login de usuario, registrarte primeramente y luego validar los datos al ingresar.
 
-En esta ultima actualizacion, el proceso de registro y login se hace con la proteccion de la contraseña del usuario almacenada en la base de datos ademas de agregar un boton para realizar el registro con tu perfil de gitHub.
+En esta ultima actualizacion, el proceso de registro y login se hace utilizando JWT, almacenando en la base de datos los datos del usuario.
 
 ## Instalación
 
@@ -29,6 +29,8 @@ En esta ultima actualizacion, el proceso de registro y login se hace con la prot
     npm i passport
     npm i passport-local
     npm i passport-github2
+    npm install express jsonwebtoken
+    npm install passport-jwt
 ```
 
 
@@ -120,6 +122,8 @@ La aplicación estará disponible en:
 
 ### 2. Puedes utilizar las siguientes rutas para interactuar con la aplicación desde el navegador web:
 
+- `//api/sessions/current`: utilizará el modelo de sesión que estés utilizando, para poder devolver en una respuesta el usuario actual.
+.
 - `/cart/:cid`: Obtiene la lista renderizada de todos los productos dentro del carrito, por el id del carrito.
 - `/:id`: Obtiene el producto renderizado por su ID.
 
@@ -192,7 +196,7 @@ Integracion/
 - connect-mongo
 - bcrypt
 - passport
-
+- JWT
 
 
 ## Capturas de Pantalla
@@ -201,5 +205,4 @@ Integracion/
 ![Captura de Pantalla 2](/src/public/files/Capturadepantalla2.png)
 ![Captura de Pantalla 3](/src/public/files/Capturadepantalla3.png)
 ![Captura de Pantalla 4](/src/public/files/Capturadepantalla4.png)
-![Captura de Pantalla 5](/src/public/files/Capturadepantalla5.png) ![Captura de Pantalla 6](/src/public/files/Capturadepantalla6.png)
 

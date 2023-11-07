@@ -1,60 +1,54 @@
 import UserManager from "../controllers/UserManager.js"
 import { Router } from "express"
 import passport from "passport"
-
+import jwt from "jsonwebtoken"
+import __dirname, { authorization, passportCall } from "../utils.js"
+import { generateAndSetToken } from "../../jwt/token.js"
+import CartManager from "../controllers/CartManager.js"
 const router = Router()
-const user = new UserManager()
+
+const users = new UserManager()
+const cart = new CartManager()
 
 
 
-router.post("/register", passport.authenticate("register", {failureRedirect:"/failregister"}), async (req, res) => {
-    try 
-    {
-        const { first_name, last_name, email, age, password, rol }= req.body
-        if (!first_name || !last_name || !email || !age)  return res.status(400).send({ status: 400, error: 'Faltan datos' })
-        res.redirect("/login")
-    } catch (error) 
-    {
-        res.status(500).send("Error al acceder al registrar: " + error.message);
+
+
+router.post("/login", async (req,res)=>{
+    const {email, password} = req.body
+    const emailToFind = email
+    const user = await users.findEmail({ email: emailToFind})
+    if(!user || user.password !== password){
+        return res.status(401).json({message: "Error de autenticacion"})
     }
+    const token = generateAndSetToken(res, email, password)
+    res.json({token, user: {email: user.email, rol: user.rol}})   
 })
-
-router.get("/failregister",async(req,res)=>{
-    console.log("Failed Strategy")
-    res.send({error: "Failed"})
-})
-
-
-
-router.post("/login", passport.authenticate("login", {failureRedirect:"/faillogin"}),async (req, res) => {
-    try 
-    {
-        if(!req.user) return res.status(400).send({status:"error", error: "Credenciales invalidas"})
-
-            if(req.user.rol === 'admin'){
-            req.session.emailUsuario = req.user.email
-            req.session.nomUsuario = req.user.first_name
-            req.session.apeUsuario = req.user.last_name
-            req.session.rolUsuario = req.user.rol
-            res.redirect("/profile")
-        }
-        else{
-            req.session.emailUsuario = req.user.email
-            req.session.rolUsuario = req.user.rol
-            res.redirect("/products")
-        }
-        
-        }
-        catch (error) 
-    {
-        res.status(500).send("Error al acceder al perfil: " + error.message);
-    }
-}) 
 
 
 router.get("/faillogin",async(req,res)=>{
     res.send({error: "Failed Login"})
 })
+
+router.post("/register", async (req, res) => {
+    const { first_name, last_name, email, age, password, rol }= req.body
+    const emailToFind = email
+    const exist = await users.findEmail({email: emailToFind})
+    if (exist)  return res.status(400).send({ status: "error", error: 'Usuario ya existe' })
+    const newUser = {
+        first_name,
+        last_name,
+        email,
+        age,
+        password,
+        cart, //carts.addCart(),
+        rol
+    }
+    users.addUser(newUser)
+    const token = generateAndSetToken(res,email, password)
+    res.send({token})
+})
+
 
 
 router.get("/logout", async (req, res) => {
@@ -79,6 +73,10 @@ router.get("/login", async (req, res) => {
         title: "Vista Login",
     });
     
+})
+
+router.get('/current', passportCall('jwt'), authorization('user'), (req,res) =>{
+    res.send(req.user)
 })
 
 export default router
