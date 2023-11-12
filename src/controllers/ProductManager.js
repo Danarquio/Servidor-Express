@@ -6,7 +6,7 @@ class ProductManager extends productsModel{
         super();
     }
 
-    readProducts = async () => {
+    async readProducts() {
       try {
           const products = await productsModel.find();
           return products;
@@ -17,7 +17,7 @@ class ProductManager extends productsModel{
   }
   
 
-    exist = async (id) => {
+    async exist(id) {
       try {
           const product = await productsModel.findById(id);
           return product;
@@ -41,7 +41,7 @@ class ProductManager extends productsModel{
     
     
     
-    getProducts = async () => {
+    async getProducts() {
         return await this.readProducts()
     }
 

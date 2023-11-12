@@ -2,29 +2,30 @@ import { Router } from "express";
 import { productsModel } from "../models/products.model.js";
 import ProductManager  from "../controllers/ProductManager.js"
 const router = Router()
-const products =new ProductManager()
+const productManager = new ProductManager()
 
 //get
-router.get("/", async(req,res)=> {
+router.get("/", async (req, res) => {
     try {
-        let  products= await productsModel.find()
-        res.send({result : "success", payload:  products})
-    } catch(error){
-        console.log(error)
+      const products = await productManager.getProducts();
+      res.send({ result: "success", payload: products });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({ status: "error", error: "Error al obtener productos" });
     }
-})
-
+  });
+  
 //get producto por id
 router.get("/:id", async (req, res) => {
-    try{
-        const prodId = req.params.id;
-        const productDetails = await products.getProductById(prodId);
-        res.send({ product: productDetails });
+    try {
+      const prodId = req.params.id;
+      const productDetails = await productManager.getProductById(prodId);
+      res.send({ product: productDetails });
     } catch (error) {
-        console.error('Error al obtener el producto:', error);
-        res.status(500).json({ error: 'Error al obtener el producto' });
-    } 
-});
+      console.error('Error al obtener el producto:', error);
+      res.status(500).json({ error: 'Error al obtener el producto' });
+    }
+  });
 
 //post
 router.post("/" , async(req,res)=> {
@@ -122,4 +123,6 @@ router.get("/info", async (req, res) => {
 
 export default router
 
+
+//se cambio la const products por productManager
 

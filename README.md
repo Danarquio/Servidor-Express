@@ -136,8 +136,10 @@ La aplicación estará disponible en:
 
 ## Estructura del Proyecto
 ```
-Integracion/
+Arquitectura/
 ├── src/
+│   ├── config/
+│   │   └── passport.config.js
 │   ├── controllers/
 │   │   ├── CartManager.js
 │   │   ├── multer.js
@@ -170,7 +172,6 @@ Integracion/
 │   │   ├── productos.handlebars
 │   │   ├── profile.handlebars
 │   │   └── register.handlebars
-
 │   ├── index.js
 │   └── utils.js
 ├── package.json

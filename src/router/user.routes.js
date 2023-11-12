@@ -81,4 +81,19 @@ router.get("/login", async (req, res) => {
     
 })
 
+router.get("/current", async (req, res) => { 
+    if (!req.session.emailUsuario) 
+    {
+        return res.redirect("/login")
+    }
+    res.render("profile", {
+        title: "Vista Profile Admin",
+        first_name: req.session.nomUsuario,
+        last_name: req.session.apeUsuario,
+        email: req.session.emailUsuario,
+        rol: req.session.rolUsuario,
+
+    });
+})
+
 export default router

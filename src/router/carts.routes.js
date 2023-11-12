@@ -3,20 +3,20 @@ import { cartsModel } from "../models/carts.model.js";
 import CartManager from "../controllers/CartManager.js";
 
 const router = Router()
-const carts = new CartManager()
+const cartManager = new CartManager()
 
 
 //GESTION DE CARRITO
 //get
-router.get("/", async(req,res)=> {
+router.get("/", async (req, res) => {
     try {
-        let carts = await cartsModel.find()
-        res.send({result : "success", payload:  carts})
-    } catch(error){
-        console.log(error)
-        res.status(500).send({ status: "error", error: "Error al obtener carritos" })
+      const carts = await cartManager.getCarts();
+      res.send({ result: "success", payload: carts });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({ status: "error", error: "Error al obtener carritos" });
     }
-})
+  });
 
 // post
 router.post("/", async (req, res) => {
