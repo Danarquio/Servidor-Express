@@ -16,8 +16,5 @@ router.post("/add", async (req, res) => {
   }
 });
 
-// Otros endpoints relacionados con el carrito...
-
-// ...
 
 export default router;

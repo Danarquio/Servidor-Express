@@ -1,9 +1,8 @@
-# 2da Preentrega
+# Desafio 
 ## Servidor Express con Node, Handlebars y persistencia de datos en MongoDB con login de usuario incorporado
+Este proyecto es una aplicación en Node.js que gestiona productos y carritos de compras. Permite agregar, actualizar, eliminar y consultar productos y carritos de compra. Además, utiliza Handlebars para renderizar las vistas tanto de la lista de productos y detalle del producto como el carrito con los productos agregados. Para poder acceder a las funcionalidades de ver y gestionar productos, debes pasar un login de usuario, registrarte primeramente y luego validar los datos al ingresar, el proceso de registro hace que el usuario se guarde en nuestra base de datos en MongoDb de manera codificada con la constraseña encriptada.
 
-Este proyecto es una aplicación en Node.js que gestiona productos y carritos de compras. Permite agregar, actualizar, eliminar y consultar productos y carritos de compra. Además, utiliza Handlebars para renderizar las vistas tanto de la lista de productos y detalle del producto como el carrito con los productos agregados. Para poder acceder a las funcionalidades de ver y gestionar productos, debes pasar un login de usuario, registrarte primeramente y luego validar los datos al ingresar.
-
-En esta ultima actualizacion, el proceso de registro y login se hace con la proteccion de la contraseña del usuario almacenada en la base de datos ademas de agregar un boton para realizar el registro con tu perfil de gitHub.
+En esta ultima actualizacion, modificamos la distribucion de los archivos, carpetas y funciones para cumplir con los parametros de arquitectura por capas utilizando DAO, router y controller. Se agrega tambien un archivo .env donde se encuentran las credenciales para acceder a la base de datos, tambien se separo la logica de acceso al session y a la db ubicado ahora en la carpeta config.
 
 ## Instalación
 
@@ -21,6 +20,7 @@ En esta ultima actualizacion, el proceso de registro y login se hace con la prot
     npm i express-handlebars
     npm i MongoDB
     npm i Mongoose
+    npm i Nodemon
     npm i cookie-parser
     npm i express-session
     npm i session-file-store
@@ -29,6 +29,18 @@ En esta ultima actualizacion, el proceso de registro y login se hace con la prot
     npm i passport
     npm i passport-local
     npm i passport-github2
+    npm i jsonwebtoken
+    npm i dotenv
+```
+4. Crea un archivo en la raiz del proyecto llamado .env y agrega tus credenciales para acceder a la base de datos MongoDB siguiendo el esquema presentado debajo y modificando los siguientes segmentos "TU-NOMBRE-DE-USUARIO","TU-PASSWORD", "TU CONTRASEÑA" :
+
+
+
+```bash
+   MONGO_URI=mongodb+srv://"TU-NOMBRE-DE-USUARIO":"TU-PASSWORD"@cluster0.xtb0h9o.mongodb.net/dan?retryWrites=true&w=majority
+   
+   SESSION_SECRET="TU CONTRASEÑA"
+
 ```
 
 
@@ -139,12 +151,21 @@ La aplicación estará disponible en:
 Arquitectura/
 ├── src/
 │   ├── config/
+│   │   ├── db.js
+│   │   ├── session.js
 │   │   └── passport.config.js
 │   ├── controllers/
+│   │   ├── Cartcontroller.js
+│   │   ├── Productcontroller.js
+│   │   ├── Usercontroller.js
 │   │   ├── CartManager.js
 │   │   ├── multer.js
 │   │   ├── ProductManager.js
 │   │   └── UserManager.js
+│   ├── DAO/
+│   │   ├── CartDao.json
+│   │   ├── ProductDao.json
+│   │   └── UserDao.js
 │   ├── models/
 │   │   ├── carts.json
 │   │   ├── carts.model.js
@@ -163,6 +184,10 @@ Arquitectura/
 │   │   ├── upload.routes.js
 │   │   ├── user.routes.js
 │   │   └── views.routes.js
+│   ├── services/
+│   │   ├── CartService.json
+│   │   ├── ProductService.json
+│   │   └── UserService.js
 │   ├── views/
 │   │   ├── cart.handlebars
 │   │   ├── chat.handlebars
@@ -172,8 +197,12 @@ Arquitectura/
 │   │   ├── productos.handlebars
 │   │   ├── profile.handlebars
 │   │   └── register.handlebars
+│   ├── app.js
 │   ├── index.js
 │   └── utils.js
+├── .env
+├── .gitignore
+├── package-lock.json
 ├── package.json
 └── README.md
 ```
@@ -193,6 +222,7 @@ Arquitectura/
 - connect-mongo
 - bcrypt
 - passport
+- dotenv
 
 
 
@@ -202,5 +232,6 @@ Arquitectura/
 ![Captura de Pantalla 2](/src/public/files/Capturadepantalla2.png)
 ![Captura de Pantalla 3](/src/public/files/Capturadepantalla3.png)
 ![Captura de Pantalla 4](/src/public/files/Capturadepantalla4.png)
-![Captura de Pantalla 5](/src/public/files/Capturadepantalla5.png) ![Captura de Pantalla 6](/src/public/files/Capturadepantalla6.png)
-
+![Captura de Pantalla 5](/src/public/files/Capturadepantalla5.png) 
+![Captura de Pantalla 6](/src/public/files/Capturadepantalla6.png)
+![Captura de Pantalla 7](/src/public/files/Capturadepantalla6.png)
