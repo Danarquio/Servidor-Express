@@ -234,4 +234,4 @@ Arquitectura/
 ![Captura de Pantalla 4](/src/public/files/Capturadepantalla4.png)
 ![Captura de Pantalla 5](/src/public/files/Capturadepantalla5.png) 
 ![Captura de Pantalla 6](/src/public/files/Capturadepantalla6.png)
-![Captura de Pantalla 7](/src/public/files/Capturadepantalla6.png)
+![Captura de Pantalla 7](/src/public/files/Capturadepantalla7.png)
